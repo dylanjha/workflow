@@ -1,6 +1,6 @@
 import { BaseBuilder, createBaseBuilderConfig } from '@workflow/builders';
 import { join } from 'pathe';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 
 export interface NestJSBuilderOptions {
   rootDir: string;
@@ -46,5 +46,9 @@ export class NestJSBuilder extends BaseBuilder {
       outfile: join(this.#outDir, 'webhook.mjs'),
       bundle: false,
     });
+
+    if (process.env.VERCEL_DEPLOYMENT_ID === undefined) {
+      await writeFile(join(this.#outDir, '.gitignore'), '*');
+    }
   }
 }

@@ -30,9 +30,7 @@ export class AppController {
     } catch (error) {
       console.log('error during getHookByToken', error);
       // TODO: `WorkflowAPIError` is not exported, so for now
-      // we'll return 422 assuming it's the "invalid" token test case
-      // NOTE: Need to return 422 because Nitro passes 404 requests to the dev server to handle.
-      throw new HttpException(null, HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(null, HttpStatus.NOT_FOUND);
     }
 
     await resumeHook(hook.token, {
