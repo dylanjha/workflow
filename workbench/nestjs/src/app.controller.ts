@@ -15,6 +15,7 @@ import {
   WorkflowRunNotCompletedError,
 } from 'workflow/internal/errors';
 import { hydrateWorkflowArguments } from 'workflow/internal/serialization';
+import { allWorkflows } from './lib/_workflow.js';
 
 @Controller('api')
 export class AppController {
@@ -231,7 +232,7 @@ export class AppController {
     // This route tests calling step functions directly outside of any workflow context
     // After the SWC compiler changes, step functions in client mode have their directive removed
     // and keep their original implementation, allowing them to be called as regular async functions
-    const { add } = await import('../workflows/99_e2e.js');
+    const { add } = await import('./workflows/99_e2e.js');
 
     const { x, y } = body;
 

@@ -1,0 +1,42 @@
+{
+  "name": "@workflow/nest",
+  "version": "4.0.0-beta.1",
+  "description": "NestJS integration for Workflow DevKit",
+  "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vercel/workflow.git",
+    "directory": "packages/nestjs"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "tsc --build --clean && rm -rf dist"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.9",
+    "@nestjs/core": "^11.1.9",
+    "@nestjs/schematics": "^11.0.9",
+    "@swc/core": "catalog:",
+    "@workflow/builders": "workspace:*",
+    "@workflow/core": "workspace:*",
+    "@workflow/swc-plugin": "workspace:*",
+    "exsolve": "1.0.7",
+    "pathe": "2.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@workflow/tsconfig": "workspace:*"
+  }
+}
