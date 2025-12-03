@@ -8,7 +8,7 @@
     "prebuild": "pnpm generate:workflows",
     "dev": "nest start --watch",
     "build": "nest build",
-    "start": "node dist/main -- -b swc"
+    "start": "node dist/main"
   },
   "engines": {
     "npm": ">=10.0.0",

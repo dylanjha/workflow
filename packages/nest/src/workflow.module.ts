@@ -7,35 +7,21 @@ import {
 import { NestJSBuilder } from './builder.js';
 import { WorkflowController } from './workflow.controller.js';
 
-export interface WorkflowModuleOptions {
-  watch?: boolean;
-}
-
 @Module({})
 export class WorkflowModule implements OnModuleInit, OnModuleDestroy {
   private builder: NestJSBuilder | null = null;
-  private options: WorkflowModuleOptions;
 
-  constructor() {
-    this.options = {};
-  }
-
-  static forRoot(options: WorkflowModuleOptions = {}): DynamicModule {
+  static forRoot(): DynamicModule {
     return {
       module: WorkflowModule,
       controllers: [WorkflowController],
-      providers: [{ provide: 'WORKFLOW_OPTIONS', useValue: options }],
+      providers: [{ provide: 'WORKFLOW_OPTIONS', useValue: {} }],
       global: true,
     };
   }
 
   async onModuleInit() {
-    const isDev = process.env.NODE_ENV !== 'production';
-    this.builder = new NestJSBuilder({
-      rootDir: process.cwd(),
-      watch: this.options.watch ?? isDev,
-      dirs: ['src'],
-    });
+    this.builder = new NestJSBuilder();
     await this.builder.build();
   }
 

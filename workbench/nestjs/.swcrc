@@ -1,0 +1,19 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "transform": {
+      "legacyDecorator": true,
+      "decoratorMetadata": true
+    },
+    "experimental": {
+      "plugins": [
+        ["@workflow/swc-plugin", { "mode": "client" }]
+      ]
+    }
+  },
+  "sourceMaps": true
+}

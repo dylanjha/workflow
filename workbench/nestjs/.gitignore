@@ -401,3 +401,4 @@ dist
 
 # Workflow
 src/lib/_workflow.ts
+.vercel

@@ -2,22 +2,16 @@ import { BaseBuilder, createBaseBuilderConfig } from '@workflow/builders';
 import { join } from 'pathe';
 import { mkdir, writeFile } from 'node:fs/promises';
 
-export interface NestJSBuilderOptions {
-  rootDir: string;
-  watch?: boolean;
-  dirs?: string[];
-}
-
 export class NestJSBuilder extends BaseBuilder {
   #outDir: string;
 
-  constructor(options: NestJSBuilderOptions) {
-    const outDir = join(options.rootDir, '.nestjs/workflow');
+  constructor() {
+    const workingDir = process.cwd();
+    const outDir = join(workingDir, '.nestjs/workflow');
     super({
       ...createBaseBuilderConfig({
-        workingDir: options.rootDir,
-        watch: options.watch,
-        dirs: options.dirs ?? ['workflows', 'src/workflows'],
+        workingDir: workingDir,
+        dirs: ['src'],
       }),
       buildTarget: 'next', // Reuse next target format
     });
