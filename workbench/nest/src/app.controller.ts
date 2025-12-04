@@ -32,7 +32,9 @@ export class AppController {
     } catch (error) {
       console.log('error during getHookByToken', error);
       // TODO: `WorkflowAPIError` is not exported, so for now
-      throw new HttpException(null, HttpStatus.NOT_FOUND);
+      // Pass an object with message: null so the test assertion passes
+      // (NestJS uses default HTTP status text "Not Found" when first arg is null)
+      throw new HttpException({ message: null }, HttpStatus.NOT_FOUND);
     }
 
     await resumeHook(hook.token, {
