@@ -1437,7 +1437,7 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0(@swc/core@1.15.3)(chokidar@4.0.3)
       '@swc/core':
-        specifier: ^1.10.8
+        specifier: 'catalog:'
         version: 1.15.3
       '@types/express':
         specifier: ^5.0.0
