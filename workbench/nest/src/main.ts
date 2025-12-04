@@ -7,11 +7,10 @@ async function bootstrap() {
 
   // Start the Postgres World
   // Needed since we test this in CI
-  if (process.env.NEXT_RUNTIME !== 'edge') {
-    // kickstart the world
-    import('workflow/runtime').then(async ({ getWorld }) => {
-      await getWorld().start?.();
-    });
+  if (process.env.WORKFLOW_TARGET_WORLD === '@workflow/world-postgres') {
+    const { getWorld } = await import('workflow/runtime');
+    console.log('Starting Postgres World...');
+    await getWorld().start?.();
   }
 }
 
