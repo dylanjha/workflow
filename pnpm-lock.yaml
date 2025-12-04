@@ -608,7 +608,7 @@ importers:
         version: 11.0.9(chokidar@4.0.3)(typescript@5.9.3)
       '@swc/core':
         specifier: 'catalog:'
-        version: 1.11.24
+        version: 1.15.3
       '@workflow/builders':
         specifier: workspace:*
         version: link:../builders
