@@ -62,6 +62,12 @@ const DEV_TEST_CONFIGS = {
     apiFileImportPath: '../..',
     workflowsDir: 'src/workflows',
   },
+  'react-router': {
+    generatedStepPath: '.workflow/step.ts',
+    generatedWorkflowPath: '.workflow/flow.ts',
+    apiFilePath: 'app/routes/api.chat.ts',
+    apiFileImportPath: '../..',
+  },
 };
 
 const matrix = {
@@ -129,9 +135,18 @@ matrix.app.push({
   name: 'fastify',
   project: 'workbench-fastify-workflow',
   ...DEV_TEST_CONFIGS.fastify,
+});
+
+matrix.app.push({
   name: 'astro',
   project: 'workbench-astro-workflow',
   ...DEV_TEST_CONFIGS.astro,
+});
+
+matrix.app.push({
+  name: 'react-router',
+  project: 'workbench-react-router-workflow',
+  ...DEV_TEST_CONFIGS['react-router'],
 });
 
 console.log(JSON.stringify(matrix));
