@@ -6,11 +6,13 @@ import {
 } from '@nestjs/common';
 import { NestJSBuilder } from './builder.js';
 import { WorkflowController } from './workflow.controller.js';
+import { createBuildQueue } from '@workflow/builders';
+
+const enqueue = createBuildQueue();
+const builder = new NestJSBuilder();
 
 @Module({})
 export class WorkflowModule implements OnModuleInit, OnModuleDestroy {
-  private builder: NestJSBuilder | null = null;
-
   static forRoot(): DynamicModule {
     return {
       module: WorkflowModule,
@@ -20,12 +22,15 @@ export class WorkflowModule implements OnModuleInit, OnModuleDestroy {
     };
   }
 
+  static async build() {
+    await enqueue(() => builder.build());
+  }
+
   async onModuleInit() {
-    this.builder = new NestJSBuilder();
-    await this.builder.build();
+    await enqueue(() => builder.build());
   }
 
   async onModuleDestroy() {
-    // Cleanup watch mode if needed
+    // Cleanup if needed
   }
 }
