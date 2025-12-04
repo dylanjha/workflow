@@ -3,12 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "generate:workflows": "node ../scripts/generate-workflows-registry.js",
+    "predev": "pnpm generate:workflows",
+    "prebuild": "pnpm generate:workflows",
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@react-router/fs-routes": "7.10.1",
     "@react-router/node": "^7.10.1",
     "@react-router/serve": "^7.10.1",
     "isbot": "^5.1.32",
