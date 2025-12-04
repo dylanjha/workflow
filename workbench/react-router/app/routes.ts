@@ -1,4 +1,8 @@
 import type { RouteConfig } from '@react-router/dev/routes';
 import { flatRoutes } from '@react-router/fs-routes';
+import { workflowRoutes } from 'workflow/react-router';
 
-export default flatRoutes() satisfies RouteConfig;
+export default [
+  ...workflowRoutes(),
+  ...(await flatRoutes()),
+] satisfies RouteConfig;
