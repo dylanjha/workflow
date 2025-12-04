@@ -814,7 +814,7 @@ describe('e2e', () => {
     }
   );
 
-  test.skip(
+  test(
     'spawnWorkflowFromStepWorkflow - spawning a child workflow using start() inside a step',
     { timeout: 120_000 },
     async () => {
