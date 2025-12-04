@@ -3,13 +3,11 @@ import { join } from 'pathe';
 
 @Controller('.well-known/workflow/v1')
 export class WorkflowController {
-  private getOutDir() {
-    return join(process.cwd(), '.nestjs/workflow');
-  }
+  private outDir = join(process.cwd(), '.nestjs/workflow');
 
   @Post('step')
   async handleStep(@Req() req: any, @Res() res: any) {
-    const { POST } = await import(join(this.getOutDir(), 'steps.mjs'));
+    const { POST } = await import(join(this.outDir, 'steps.mjs'));
     const webRequest = this.toWebRequest(req);
     const webResponse = await POST(webRequest);
     await this.sendWebResponse(res, webResponse);
@@ -17,7 +15,7 @@ export class WorkflowController {
 
   @Post('flow')
   async handleFlow(@Req() req: any, @Res() res: any) {
-    const { POST } = await import(join(this.getOutDir(), 'workflows.mjs'));
+    const { POST } = await import(join(this.outDir, 'workflows.mjs'));
     const webRequest = this.toWebRequest(req);
     const webResponse = await POST(webRequest);
     await this.sendWebResponse(res, webResponse);
@@ -25,7 +23,7 @@ export class WorkflowController {
 
   @All('webhook/:token')
   async handleWebhook(@Req() req: any, @Res() res: any) {
-    const { POST } = await import(join(this.getOutDir(), 'webhook.mjs'));
+    const { POST } = await import(join(this.outDir, 'webhook.mjs'));
     const webRequest = this.toWebRequest(req);
     const webResponse = await POST(webRequest);
     await this.sendWebResponse(res, webResponse);
