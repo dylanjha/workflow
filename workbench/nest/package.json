@@ -1,5 +1,5 @@
 {
-  "name": "@workflow/example-nestjs",
+  "name": "@workflow/example-nest",
   "private": true,
   "version": "0.0.0",
   "scripts": {
