@@ -166,6 +166,8 @@ jobs:
             project-id: "prj_5Yap0VDQ633v998iqQ3L3aQ25Cck"
           - name: "astro"
             project-id: "prj_YDAXj3K8LM0hgejuIMhioz2yLgTI"
+          - name: "nest"
+            project-id: "prj_icrY4mr14zKKpDpa3erA1Cc2APXa"
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
