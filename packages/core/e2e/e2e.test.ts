@@ -30,6 +30,9 @@ async function triggerWorkflow(
 
   const res = await fetch(url, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(dehydratedArgs),
   });
   if (!res.ok) {
@@ -178,6 +181,7 @@ describe('e2e', () => {
 
     let res = await fetch(hookUrl, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, data: { message: 'one' } }),
     });
     expect(res.status).toBe(200);
@@ -187,6 +191,7 @@ describe('e2e', () => {
     // Invalid token test
     res = await fetch(hookUrl, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: 'invalid' }),
     });
     // NOTE: For Nitro apps (Vite, Hono, etc.) in dev mode, status 404 does some
@@ -194,10 +199,12 @@ describe('e2e', () => {
     // This is because Nitro passes the 404 requests to the dev server to handle.
     expect(res.status).toBeOneOf([404, 422]);
     body = await res.json();
-    expect(body).toBeNull();
+    // NestJS wraps error responses in { statusCode, message } format.
+    expect(body === null || body?.message === null).toBe(true);
 
     res = await fetch(hookUrl, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, data: { message: 'two' } }),
     });
     expect(res.status).toBe(200);
@@ -206,6 +213,7 @@ describe('e2e', () => {
 
     res = await fetch(hookUrl, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, data: { message: 'three', done: true } }),
     });
     expect(res.status).toBe(200);
@@ -249,6 +257,7 @@ describe('e2e', () => {
       ),
       {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: 'one' }),
       }
     );
@@ -264,6 +273,7 @@ describe('e2e', () => {
       ),
       {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: 'two' }),
       }
     );
@@ -279,6 +289,7 @@ describe('e2e', () => {
       ),
       {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: 'three' }),
       }
     );
@@ -323,6 +334,7 @@ describe('e2e', () => {
     );
     const res = await fetch(invalidWebhookUrl, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({}),
     });
     expect(res.status).toBe(404);
@@ -672,6 +684,7 @@ describe('e2e', () => {
       const hookUrl = new URL('/api/hook', deploymentUrl);
       let res = await fetch(hookUrl, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token,
           data: { message: 'test-message-1', customData },
@@ -702,6 +715,7 @@ describe('e2e', () => {
       // Send payload to second workflow using same token
       res = await fetch(hookUrl, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token,
           data: { message: 'test-message-2', customData },

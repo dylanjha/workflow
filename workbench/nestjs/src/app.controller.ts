@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Post,
@@ -20,6 +21,7 @@ import { allWorkflows } from './lib/_workflow.js';
 @Controller('api')
 export class AppController {
   @Post('hook')
+  @HttpCode(200)
   async resumeWorkflowHook(@Body() body: { token: string; data: any }) {
     const { token, data } = body;
 

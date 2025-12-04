@@ -1396,6 +1396,9 @@ importers:
       '@workflow/ai':
         specifier: workspace:*
         version: link:../../packages/ai
+      '@workflow/swc-plugin':
+        specifier: workspace:*
+        version: link:../../packages/swc-plugin-workflow
       '@workflow/world-postgres':
         specifier: workspace:*
         version: link:../../packages/world-postgres

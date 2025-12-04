@@ -13,7 +13,7 @@ export class NestJSBuilder extends BaseBuilder {
         workingDir: workingDir,
         dirs: ['src'],
       }),
-      buildTarget: 'next', // Reuse next target format
+      buildTarget: 'nest',
     });
     this.#outDir = outDir;
   }

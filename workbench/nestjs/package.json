@@ -20,6 +20,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@workflow/ai": "workspace:*",
     "@workflow/world-postgres": "workspace:*",
+    "@workflow/swc-plugin": "workspace:*",
     "openai": "6.9.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
