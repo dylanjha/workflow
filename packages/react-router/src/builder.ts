@@ -78,8 +78,10 @@ export class LocalBuilder extends BaseBuilder {
 
     // Modify step-impl.ts to export handleRequest instead of POST
     let implContent = await readFile(stepsImplFile, 'utf-8');
+    // Handle both bundled format: `export { stepEntrypoint as POST };`
+    // and re-export format: `export { stepEntrypoint as POST } from 'workflow/runtime';`
     implContent = implContent.replace(
-      /export\s*\{\s*stepEntrypoint\s+as\s+POST\s*\}\s*;?$/m,
+      /export\s*\{\s*stepEntrypoint\s+as\s+POST\s*\}[^;]*;?/gm,
       'export const handleRequest = stepEntrypoint;'
     );
     await writeFile(stepsImplFile, implContent);
