@@ -1710,6 +1710,9 @@ importers:
       lodash.chunk:
         specifier: ^4.2.0
         version: 4.2.0
+      openai:
+        specifier: 6.10.0
+        version: 6.10.0(ws@8.18.3)(zod@4.1.11)
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -10775,6 +10778,18 @@ packages:
 
   openai@6.1.0:
     resolution: {integrity: sha512-5sqb1wK67HoVgGlsPwcH2bUbkg66nnoIYKoyV9zi5pZPqh7EWlmSrSDjAh4O5jaIg/0rIlcDKBtWvZBuacmGZg==}
+    hasBin: true
+    peerDependencies:
+      ws: ^8.18.0
+      zod: ^3.25 || ^4.0
+    peerDependenciesMeta:
+      ws:
+        optional: true
+      zod:
+        optional: true
+
+  openai@6.10.0:
+    resolution: {integrity: sha512-ITxOGo7rO3XRMiKA5l7tQ43iNNu+iXGFAcf2t+aWVzzqRaS0i7m1K2BhxNdaveB+5eENhO0VY1FkiZzhBk4v3A==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -24927,6 +24942,11 @@ snapshots:
       is-wsl: 2.2.0
 
   openai@6.1.0(ws@8.18.3)(zod@4.1.11):
+    optionalDependencies:
+      ws: 8.18.3
+      zod: 4.1.11
+
+  openai@6.10.0(ws@8.18.3)(zod@4.1.11):
     optionalDependencies:
       ws: 8.18.3
       zod: 4.1.11
