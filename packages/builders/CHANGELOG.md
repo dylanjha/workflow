@@ -1,5 +1,13 @@
 # @workflow/builders
 
+## 4.0.1-beta.23
+
+### Patch Changes
+
+- fc774e5: Fix esbuild node module plugin to show top level violation and preview file
+  - @workflow/core@4.0.1-beta.24
+  - @workflow/errors@4.0.1-beta.7
+
 ## 4.0.1-beta.22
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @workflow/next
 
+## 4.0.1-beta.27
+
+### Patch Changes
+
+- Updated dependencies [fc774e5]
+  - @workflow/builders@4.0.1-beta.23
+  - @workflow/core@4.0.1-beta.24
+
 ## 4.0.1-beta.26
 
 ### Patch Changes

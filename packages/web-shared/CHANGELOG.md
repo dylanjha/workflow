@@ -1,5 +1,14 @@
 # @workflow/web-shared
 
+## 4.0.1-beta.25
+
+### Patch Changes
+
+- 57a2c32: Add expiredAt attribute to Run
+- Updated dependencies [57a2c32]
+  - @workflow/world@4.0.1-beta.9
+  - @workflow/core@4.0.1-beta.24
+
 ## 4.0.1-beta.24
 
 ### Patch Changes
