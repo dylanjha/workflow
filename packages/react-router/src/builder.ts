@@ -28,7 +28,10 @@ export class LocalBuilder extends BaseBuilder {
   }
 
   override async build(): Promise<void> {
-    const workflowGeneratedDir = resolve(this.config.workingDir, '.workflow');
+    const workflowGeneratedDir = resolve(
+      this.config.workingDir,
+      'app/routes/.workflow'
+    );
 
     await mkdir(workflowGeneratedDir, { recursive: true });
 
