@@ -65,28 +65,38 @@ export class LocalBuilder extends BaseBuilder {
     tsBaseUrl?: string;
     tsPaths?: Record<string, string[]>;
   }) {
-    const stepsRouteFile = join(workflowGeneratedDir, 'step.ts');
+    // 1. Generate implementation file (step-impl.ts)
+    const stepsImplFile = join(workflowGeneratedDir, 'step-impl.ts');
     await this.createStepsBundle({
       format: 'esm',
       inputFiles,
-      outfile: stepsRouteFile,
+      outfile: stepsImplFile,
       externalizeNonSteps: true,
       tsBaseUrl,
       tsPaths,
     });
 
-    let stepsRouteContent = await readFile(stepsRouteFile, 'utf-8');
-
-    // Replace with react-router action export
-    stepsRouteContent = stepsRouteContent.replace(
+    // Modify step-impl.ts to export handleRequest instead of POST
+    let implContent = await readFile(stepsImplFile, 'utf-8');
+    implContent = implContent.replace(
       /export\s*\{\s*stepEntrypoint\s+as\s+POST\s*\}\s*;?$/m,
-      `${NORMALIZE_REQUEST_CONVERTER}
-export async function action({ request }) {
-  const normalRequest = await normalizeRequestConverter(request);
-  return stepEntrypoint(normalRequest);
-}`
+      'export const handleRequest = stepEntrypoint;'
     );
-    await writeFile(stepsRouteFile, stepsRouteContent);
+    await writeFile(stepsImplFile, implContent);
+
+    // 2. Generate thin route wrapper (step.ts) with dynamic import
+    const stepsRouteFile = join(workflowGeneratedDir, 'step.ts');
+    const routeContent = `// biome-ignore-all lint: generated file
+/* eslint-disable */
+// Thin route wrapper - uses dynamic import to avoid Node.js imports at top level
+${NORMALIZE_REQUEST_CONVERTER}
+export async function action({ request }: { request: Request }) {
+  const impl = await import("./step-impl");
+  const normalRequest = await normalizeRequestConverter(request);
+  return impl.handleRequest(normalRequest);
+}
+`;
+    await writeFile(stepsRouteFile, routeContent);
   }
 
   private async buildWorkflowsRoute({
@@ -100,28 +110,38 @@ export async function action({ request }) {
     tsBaseUrl?: string;
     tsPaths?: Record<string, string[]>;
   }) {
-    const workflowsRouteFile = join(workflowGeneratedDir, 'flow.ts');
+    // 1. Generate implementation file (flow-impl.ts)
+    const flowImplFile = join(workflowGeneratedDir, 'flow-impl.ts');
     await this.createWorkflowsBundle({
       format: 'esm',
-      outfile: workflowsRouteFile,
+      outfile: flowImplFile,
       bundleFinalOutput: false,
       inputFiles,
       tsBaseUrl,
       tsPaths,
     });
 
-    let workflowsRouteContent = await readFile(workflowsRouteFile, 'utf-8');
-
-    // Replace with react-router action export
-    workflowsRouteContent = workflowsRouteContent.replace(
+    // Modify flow-impl.ts to export handleRequest instead of POST
+    let implContent = await readFile(flowImplFile, 'utf-8');
+    implContent = implContent.replace(
       /export const POST = workflowEntrypoint\(workflowCode\);?$/m,
-      `${NORMALIZE_REQUEST_CONVERTER}
-export async function action({ request }) {
-  const normalRequest = await normalizeRequestConverter(request);
-  return workflowEntrypoint(workflowCode)(normalRequest);
-}`
+      'export const handleRequest = workflowEntrypoint(workflowCode);'
     );
-    await writeFile(workflowsRouteFile, workflowsRouteContent);
+    await writeFile(flowImplFile, implContent);
+
+    // 2. Generate thin route wrapper (flow.ts) with dynamic import
+    const flowRouteFile = join(workflowGeneratedDir, 'flow.ts');
+    const routeContent = `// biome-ignore-all lint: generated file
+/* eslint-disable */
+// Thin route wrapper - uses dynamic import to avoid Node.js imports at top level
+${NORMALIZE_REQUEST_CONVERTER}
+export async function action({ request }: { request: Request }) {
+  const impl = await import("./flow-impl");
+  const normalRequest = await normalizeRequestConverter(request);
+  return impl.handleRequest(normalRequest);
+}
+`;
+    await writeFile(flowRouteFile, routeContent);
   }
 
   private async buildWebhookRoute({
@@ -129,41 +149,57 @@ export async function action({ request }) {
   }: {
     workflowGeneratedDir: string;
   }) {
-    const webhookRouteFile = join(workflowGeneratedDir, 'webhook/[token].ts');
+    // 1. Generate implementation file (webhook/[token]-impl.ts)
+    const webhookImplFile = join(
+      workflowGeneratedDir,
+      'webhook/[token]-impl.ts'
+    );
 
     await this.createWebhookBundle({
-      outfile: webhookRouteFile,
+      outfile: webhookImplFile,
       bundle: false,
     });
 
-    let webhookRouteContent = await readFile(webhookRouteFile, 'utf-8');
+    let implContent = await readFile(webhookImplFile, 'utf-8');
 
-    webhookRouteContent = webhookRouteContent.replace(
+    // Modify handler to accept token as parameter instead of extracting from URL
+    implContent = implContent.replace(
       /async function handler\(request\) \{[\s\S]*?const token = decodeURIComponent\(pathParts\[pathParts\.length - 1\]\);/,
       `async function handler(request, token) {`
     );
 
-    webhookRouteContent = webhookRouteContent.replace(
+    implContent = implContent.replace(
       /const url = new URL\(request\.url\);[\s\S]*?const pathParts = url\.pathname\.split\('\/'\);[\s\S]*?\n/,
       ''
     );
 
-    // Replace with react-router loader and action exports
-    webhookRouteContent = webhookRouteContent.replace(
+    // Replace HTTP method exports with a single handleRequest export
+    implContent = implContent.replace(
       /export const GET = handler;\nexport const POST = handler;\nexport const PUT = handler;\nexport const PATCH = handler;\nexport const DELETE = handler;\nexport const HEAD = handler;\nexport const OPTIONS = handler;/,
-      `${NORMALIZE_REQUEST_CONVERTER}
-// react-router uses loader for GET requests and action for mutations
-export async function loader({ request, params }) {
-  const normalRequest = await normalizeRequestConverter(request);
-  return handler(normalRequest, params.token);
-}
-
-export async function action({ request, params }) {
-  const normalRequest = await normalizeRequestConverter(request);
-  return handler(normalRequest, params.token);
-}`
+      'export const handleRequest = handler;'
     );
 
-    await writeFile(webhookRouteFile, webhookRouteContent);
+    await writeFile(webhookImplFile, implContent);
+
+    // 2. Generate thin route wrapper (webhook/[token].ts) with dynamic import
+    const webhookRouteFile = join(workflowGeneratedDir, 'webhook/[token].ts');
+    const routeContent = `// biome-ignore-all lint: generated file
+/* eslint-disable */
+// Thin route wrapper - uses dynamic import to avoid Node.js imports at top level
+${NORMALIZE_REQUEST_CONVERTER}
+// react-router uses loader for GET requests and action for mutations
+export async function loader({ request, params }: { request: Request; params: { token: string } }) {
+  const impl = await import("./[token]-impl");
+  const normalRequest = await normalizeRequestConverter(request);
+  return impl.handleRequest(normalRequest, params.token);
+}
+
+export async function action({ request, params }: { request: Request; params: { token: string } }) {
+  const impl = await import("./[token]-impl");
+  const normalRequest = await normalizeRequestConverter(request);
+  return impl.handleRequest(normalRequest, params.token);
+}
+`;
+    await writeFile(webhookRouteFile, routeContent);
   }
 }
