@@ -1677,6 +1677,15 @@ importers:
 
   workbench/react-router:
     dependencies:
+      '@ai-sdk/react':
+        specifier: 2.0.76
+        version: 2.0.76(react@19.2.0)(zod@4.1.11)
+      '@node-rs/xxhash':
+        specifier: 1.7.6
+        version: 1.7.6
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
       '@react-router/fs-routes':
         specifier: 7.10.1
         version: 7.10.1(@react-router/dev@7.10.1(@react-router/serve@7.10.1(react-router@7.10.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(typescript@5.9.3))(@types/node@22.19.0)(jiti@2.6.1)(lightningcss@1.30.2)(react-router@7.10.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(terser@5.44.0)(tsx@4.20.6)(typescript@5.9.3)(vite@7.1.12(@types/node@22.19.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(yaml@2.8.1))(typescript@5.9.3)
@@ -1686,9 +1695,21 @@ importers:
       '@react-router/serve':
         specifier: ^7.10.1
         version: 7.10.1(react-router@7.10.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(typescript@5.9.3)
+      '@workflow/ai':
+        specifier: workspace:*
+        version: link:../../packages/ai
+      ai:
+        specifier: 'catalog:'
+        version: 5.0.104(zod@4.1.11)
+      exsolve:
+        specifier: ^1.0.7
+        version: 1.0.7
       isbot:
         specifier: ^5.1.32
         version: 5.1.32
+      lodash.chunk:
+        specifier: ^4.2.0
+        version: 4.2.0
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -1701,6 +1722,9 @@ importers:
       workflow:
         specifier: workspace:*
         version: link:../../packages/workflow
+      zod:
+        specifier: 'catalog:'
+        version: 4.1.11
     devDependencies:
       '@react-router/dev':
         specifier: ^7.10.1
@@ -1708,6 +1732,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.13
         version: 4.1.17(vite@7.1.12(@types/node@22.19.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
+      '@types/lodash.chunk':
+        specifier: ^4.2.9
+        version: 4.2.9
       '@types/node':
         specifier: ^22
         version: 22.19.0
@@ -1717,6 +1744,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.1.9
         version: 19.1.9(@types/react@19.1.13)
+      '@workflow/world-postgres':
+        specifier: workspace:*
+        version: link:../../packages/world-postgres
       tailwindcss:
         specifier: ^4.1.13
         version: 4.1.13
